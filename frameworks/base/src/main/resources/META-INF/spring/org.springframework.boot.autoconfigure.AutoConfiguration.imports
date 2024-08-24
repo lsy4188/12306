@@ -1,0 +1,2 @@
+#没有这个配置文件其他组件就无法注入这个组件(如果没有扫描这个类的话就可使用这个方法)
+itlsy.config.ApplicationBaseAutoConfiguration
