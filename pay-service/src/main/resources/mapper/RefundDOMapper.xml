@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itlsy.mapper.RefundDOMapper">
+  <resultMap id="BaseResultMap" type="itlsy.entry.RefundDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="pay_sn" jdbcType="VARCHAR" property="paySn" />
+    <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+    <result column="trade_no" jdbcType="VARCHAR" property="tradeNo" />
+    <result column="amount" jdbcType="INTEGER" property="amount" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="train_id" jdbcType="BIGINT" property="trainId" />
+    <result column="train_number" jdbcType="VARCHAR" property="trainNumber" />
+    <result column="riding_date" jdbcType="DATE" property="ridingDate" />
+    <result column="departure" jdbcType="VARCHAR" property="departure" />
+    <result column="arrival" jdbcType="VARCHAR" property="arrival" />
+    <result column="departure_time" jdbcType="TIMESTAMP" property="departureTime" />
+    <result column="arrival_time" jdbcType="TIMESTAMP" property="arrivalTime" />
+    <result column="seat_type" jdbcType="INTEGER" property="seatType" />
+    <result column="id_type" jdbcType="INTEGER" property="idType" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="del_flag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, pay_sn, order_sn, trade_no, amount, user_id, username, train_id, train_number, 
+    riding_date, departure, arrival, departure_time, arrival_time, seat_type, id_type, 
+    id_card, real_name, `status`, refund_time, create_time, update_time, del_flag
+  </sql>
+  <select id="selectByExample" parameterType="itlsy.entry.RefundDOExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_refund
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_refund
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_refund
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="itlsy.entry.RefundDOExample">
+    delete from t_refund
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="itlsy.entry.RefundDO">
+    insert into t_refund (id, pay_sn, order_sn, 
+      trade_no, amount, user_id, 
+      username, train_id, train_number, 
+      riding_date, departure, arrival, 
+      departure_time, arrival_time, seat_type, 
+      id_type, id_card, real_name, 
+      `status`, refund_time, create_time, 
+      update_time, del_flag)
+    values (#{id,jdbcType=BIGINT}, #{paySn,jdbcType=VARCHAR}, #{orderSn,jdbcType=VARCHAR}, 
+      #{tradeNo,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, 
+      #{username,jdbcType=VARCHAR}, #{trainId,jdbcType=BIGINT}, #{trainNumber,jdbcType=VARCHAR}, 
+      #{ridingDate,jdbcType=DATE}, #{departure,jdbcType=VARCHAR}, #{arrival,jdbcType=VARCHAR}, 
+      #{departureTime,jdbcType=TIMESTAMP}, #{arrivalTime,jdbcType=TIMESTAMP}, #{seatType,jdbcType=INTEGER}, 
+      #{idType,jdbcType=INTEGER}, #{idCard,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{refundTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="itlsy.entry.RefundDO">
+    insert into t_refund
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="paySn != null">
+        pay_sn,
+      </if>
+      <if test="orderSn != null">
+        order_sn,
+      </if>
+      <if test="tradeNo != null">
+        trade_no,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="trainId != null">
+        train_id,
+      </if>
+      <if test="trainNumber != null">
+        train_number,
+      </if>
+      <if test="ridingDate != null">
+        riding_date,
+      </if>
+      <if test="departure != null">
+        departure,
+      </if>
+      <if test="arrival != null">
+        arrival,
+      </if>
+      <if test="departureTime != null">
+        departure_time,
+      </if>
+      <if test="arrivalTime != null">
+        arrival_time,
+      </if>
+      <if test="seatType != null">
+        seat_type,
+      </if>
+      <if test="idType != null">
+        id_type,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+      <if test="realName != null">
+        real_name,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="refundTime != null">
+        refund_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="paySn != null">
+        #{paySn,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSn != null">
+        #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null">
+        #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="trainId != null">
+        #{trainId,jdbcType=BIGINT},
+      </if>
+      <if test="trainNumber != null">
+        #{trainNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="ridingDate != null">
+        #{ridingDate,jdbcType=DATE},
+      </if>
+      <if test="departure != null">
+        #{departure,jdbcType=VARCHAR},
+      </if>
+      <if test="arrival != null">
+        #{arrival,jdbcType=VARCHAR},
+      </if>
+      <if test="departureTime != null">
+        #{departureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arrivalTime != null">
+        #{arrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="seatType != null">
+        #{seatType,jdbcType=INTEGER},
+      </if>
+      <if test="idType != null">
+        #{idType,jdbcType=INTEGER},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="refundTime != null">
+        #{refundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="itlsy.entry.RefundDOExample" resultType="java.lang.Long">
+    select count(*) from t_refund
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_refund
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.paySn != null">
+        pay_sn = #{record.paySn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderSn != null">
+        order_sn = #{record.orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tradeNo != null">
+        trade_no = #{record.tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.amount != null">
+        amount = #{record.amount,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainId != null">
+        train_id = #{record.trainId,jdbcType=BIGINT},
+      </if>
+      <if test="record.trainNumber != null">
+        train_number = #{record.trainNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ridingDate != null">
+        riding_date = #{record.ridingDate,jdbcType=DATE},
+      </if>
+      <if test="record.departure != null">
+        departure = #{record.departure,jdbcType=VARCHAR},
+      </if>
+      <if test="record.arrival != null">
+        arrival = #{record.arrival,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departureTime != null">
+        departure_time = #{record.departureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.arrivalTime != null">
+        arrival_time = #{record.arrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.seatType != null">
+        seat_type = #{record.seatType,jdbcType=INTEGER},
+      </if>
+      <if test="record.idType != null">
+        id_type = #{record.idType,jdbcType=INTEGER},
+      </if>
+      <if test="record.idCard != null">
+        id_card = #{record.idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.realName != null">
+        real_name = #{record.realName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.refundTime != null">
+        refund_time = #{record.refundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delFlag != null">
+        del_flag = #{record.delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_refund
+    set id = #{record.id,jdbcType=BIGINT},
+      pay_sn = #{record.paySn,jdbcType=VARCHAR},
+      order_sn = #{record.orderSn,jdbcType=VARCHAR},
+      trade_no = #{record.tradeNo,jdbcType=VARCHAR},
+      amount = #{record.amount,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      username = #{record.username,jdbcType=VARCHAR},
+      train_id = #{record.trainId,jdbcType=BIGINT},
+      train_number = #{record.trainNumber,jdbcType=VARCHAR},
+      riding_date = #{record.ridingDate,jdbcType=DATE},
+      departure = #{record.departure,jdbcType=VARCHAR},
+      arrival = #{record.arrival,jdbcType=VARCHAR},
+      departure_time = #{record.departureTime,jdbcType=TIMESTAMP},
+      arrival_time = #{record.arrivalTime,jdbcType=TIMESTAMP},
+      seat_type = #{record.seatType,jdbcType=INTEGER},
+      id_type = #{record.idType,jdbcType=INTEGER},
+      id_card = #{record.idCard,jdbcType=VARCHAR},
+      real_name = #{record.realName,jdbcType=VARCHAR},
+      `status` = #{record.status,jdbcType=INTEGER},
+      refund_time = #{record.refundTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      del_flag = #{record.delFlag,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="itlsy.entry.RefundDO">
+    update t_refund
+    <set>
+      <if test="paySn != null">
+        pay_sn = #{paySn,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSn != null">
+        order_sn = #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null">
+        trade_no = #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="trainId != null">
+        train_id = #{trainId,jdbcType=BIGINT},
+      </if>
+      <if test="trainNumber != null">
+        train_number = #{trainNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="ridingDate != null">
+        riding_date = #{ridingDate,jdbcType=DATE},
+      </if>
+      <if test="departure != null">
+        departure = #{departure,jdbcType=VARCHAR},
+      </if>
+      <if test="arrival != null">
+        arrival = #{arrival,jdbcType=VARCHAR},
+      </if>
+      <if test="departureTime != null">
+        departure_time = #{departureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arrivalTime != null">
+        arrival_time = #{arrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="seatType != null">
+        seat_type = #{seatType,jdbcType=INTEGER},
+      </if>
+      <if test="idType != null">
+        id_type = #{idType,jdbcType=INTEGER},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="refundTime != null">
+        refund_time = #{refundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="itlsy.entry.RefundDO">
+    update t_refund
+    set pay_sn = #{paySn,jdbcType=VARCHAR},
+      order_sn = #{orderSn,jdbcType=VARCHAR},
+      trade_no = #{tradeNo,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=BIGINT},
+      username = #{username,jdbcType=VARCHAR},
+      train_id = #{trainId,jdbcType=BIGINT},
+      train_number = #{trainNumber,jdbcType=VARCHAR},
+      riding_date = #{ridingDate,jdbcType=DATE},
+      departure = #{departure,jdbcType=VARCHAR},
+      arrival = #{arrival,jdbcType=VARCHAR},
+      departure_time = #{departureTime,jdbcType=TIMESTAMP},
+      arrival_time = #{arrivalTime,jdbcType=TIMESTAMP},
+      seat_type = #{seatType,jdbcType=INTEGER},
+      id_type = #{idType,jdbcType=INTEGER},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      real_name = #{realName,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=INTEGER},
+      refund_time = #{refundTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      del_flag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
