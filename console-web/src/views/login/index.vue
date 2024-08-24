@@ -17,8 +17,8 @@ import Cookies from 'js-cookie'
 const useForm = Form.useForm
 
 const formState = reactive({
-  usernameOrMailOrPhone: 'lsy',
-  password: '123456',
+  username: 'lsy',
+  password: '123456789',
   code: ''
 })
 
@@ -27,10 +27,10 @@ const state = reactive({
 })
 
 const rulesRef = reactive({
-  usernameOrMailOrPhone: [
+  username: [
     {
       required: true,
-      message: '请输入用户名或者邮件或者手机号'
+      message: '请输入用户名或者手机号'
     }
   ],
   password: [
@@ -49,8 +49,7 @@ const registerForm = reactive({
   realName: '',
   idType: 0,
   idCard: '',
-  phone: '',
-  mail: ''
+  phone: ''
 })
 
 const registerRules = reactive({
@@ -89,17 +88,11 @@ const registerRules = reactive({
       required: true,
       message: '请输入电话号码'
     }
-  ],
-  mail: [
-    {
-      required: true,
-      message: '请输入邮箱'
-    }
   ]
 })
 
 const { validate: registerValidate, validateInfos: registerValidateInfos } =
-    useForm(registerForm, registerRules)
+  useForm(registerForm, registerRules)
 
 let currentAction = ref('login')
 
@@ -108,10 +101,10 @@ const router = useRouter()
 const handleFinish = () => {
   if (location.host.indexOf('12306') !== -1) {
     validate()
-        .then(() => {
-          state.open = true
-        })
-        .catch((err) => console.log(err))
+      .then(() => {
+        state.open = true
+      })
+      .catch((err) => console.log(err))
     return
   }
   validate().then(() => {
@@ -119,9 +112,9 @@ const handleFinish = () => {
       ...formState
     }).then((res) => {
       if (res.success) {
-        Cookies.set('token', res.data?.accessToken)
-        Cookies.set('username', res.data?.username)
-        Cookies.set('userId', res.data?.userId)
+        Cookies.set('token',  res.content?.accessToken)
+        Cookies.set('username', res.content?.username)
+        Cookies.set('userId', res.content?.userId)
         router.push('/ticketSearch')
       } else {
         message.error(res.message)
@@ -133,22 +126,22 @@ const handleFinish = () => {
 const handleLogin = () => {
   if (!formState.code) return message.error('请输入验证码')
   validate()
-      .then(() => {
-        fetchLogin({
-          usernameOrMailOrPhone: formState.usernameOrMailOrPhone,
-          password: formState.code
-        }).then((res) => {
-          if (res.success) {
-            Cookies.set('token', res.data?.accessToken)
-            Cookies.set('userId', res.data?.userId)
-            Cookies.set('username', res.data?.username)
-            router.push('/ticketSearch')
-          } else {
-            message.error(res.message)
-          }
-        })
+    .then(() => {
+      fetchLogin({
+        username: formState.username,
+        password: formState.code
+      }).then((res) => {
+        if (res.success) {
+          Cookies.set('token',res.content?.accessToken)
+          Cookies.set('userId', res.content?.userId)
+          Cookies.set('username', res.content?.username)
+          router.push('/ticketSearch')
+        } else {
+          message.error(res.message)
+        }
       })
-      .catch((err) => console.log(err))
+    })
+    .catch((err) => console.log(err))
 }
 
 const registerSubmit = () => {
@@ -158,19 +151,19 @@ const registerSubmit = () => {
     return
   }
   registerValidate()
-      .then(() => {
-        fetchRegister(registerForm).then((res) => {
-          if (res.success) {
-            message.success('注册成功')
-            currentAction.value = 'login'
-            formState.usernameOrMailOrPhone = res.data?.username
-            formState.password = ''
-          } else {
-            message.error(res.message)
-          }
-        })
+    .then(() => {
+      fetchRegister(registerForm).then((res) => {
+        if (res.success) {
+          message.success('注册成功')
+          currentAction.value = 'login'
+          formState.username = res.data?.username
+          formState.password = ''
+        } else {
+          message.error(res.message)
+        }
       })
-      .catch((err) => console.log(err))
+    })
+    .catch((err) => console.log(err))
 }
 </script>
 <template>
@@ -191,31 +184,31 @@ const registerSubmit = () => {
         <button @click="() => (currentAction = 'register')">去注册</button>
       </div>
       <div
-          class="white-panel"
-          :class="{ 'white-panel-left': currentAction === 'register' }"
+        class="white-panel"
+        :class="{ 'white-panel-left': currentAction === 'register' }"
       >
         <div class="login-show" v-if="currentAction === 'login'">
           <h1 class="title">登录</h1>
           <Form name="basic" autocomplete="off">
-            <FormItem v-bind="validateInfos.usernameOrMailOrPhone">
+            <FormItem v-bind="validateInfos.username">
               <Input
-                  size="large"
-                  v-model:value="formState.usernameOrMailOrPhone"
-                  placeholder="用户名"
+                size="large"
+                v-model:value="formState.username"
+                placeholder="用户名"
               >
                 <template #prefix
-                ><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template
-                ></Input>
+                  ><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template
+              ></Input>
             </FormItem>
 
             <FormItem v-bind="validateInfos.password">
               <InputPassword
-                  size="large"
-                  v-model:value="formState.password"
-                  placeholder="密码"
+                size="large"
+                v-model:value="formState.password"
+                placeholder="密码"
               >
                 <template #prefix
-                ><LockOutlined style="color: rgba(0, 0, 0, 0.25)"
+                  ><LockOutlined style="color: rgba(0, 0, 0, 0.25)"
                 /></template>
               </InputPassword>
             </FormItem>
@@ -223,10 +216,10 @@ const registerSubmit = () => {
               <div class="action-btn">
                 <a href="">忘记密码？</a>
                 <Button
-                    type="primary"
-                    :style="{ backgroundColor: '#202020', border: 'none' }"
-                    @click="handleFinish"
-                >登录</Button
+                  type="primary"
+                  :style="{ backgroundColor: '#202020', border: 'none' }"
+                  @click="handleFinish"
+                  >登录</Button
                 >
               </div>
             </FormItem>
@@ -237,51 +230,44 @@ const registerSubmit = () => {
           <Form name="basic" autocomplete="off" :label-col="{ span: 6 }">
             <FormItem label="用户名" v-bind="registerValidateInfos.username">
               <Input
-                  v-model:value="registerForm.username"
-                  placeholder="请输入用户名"
+                v-model:value="registerForm.username"
+                placeholder="请输入用户名"
               >
               </Input>
             </FormItem>
             <FormItem label="密码" v-bind="registerValidateInfos.password">
               <InputPassword
-                  v-model:value="registerForm.password"
-                  placeholder="密码"
+                v-model:value="registerForm.password"
+                placeholder="密码"
               >
               </InputPassword>
             </FormItem>
 
             <FormItem label="姓名" v-bind="registerValidateInfos.realName">
               <Input
-                  v-model:value="registerForm.realName"
-                  placeholder="请输入姓名"
+                v-model:value="registerForm.realName"
+                placeholder="请输入姓名"
               >
               </Input>
             </FormItem>
             <FormItem label="证件类型" v-bind="registerValidateInfos.idType">
               <Select
-                  :options="[{ value: 0, label: '中国居民身份证' }]"
-                  v-model:value="registerForm.idType"
-                  placeholder="请选择证件类型"
+                :options="[{ value: 0, label: '中国居民身份证' }]"
+                v-model:value="registerForm.idType"
+                placeholder="请选择证件类型"
               ></Select>
             </FormItem>
             <FormItem label="证件号码" v-bind="registerValidateInfos.idCard">
               <Input
-                  v-model:value="registerForm.idCard"
-                  placeholder="请输入证件号码"
+                v-model:value="registerForm.idCard"
+                placeholder="请输入证件号码"
               >
               </Input>
             </FormItem>
             <FormItem label="手机号码" v-bind="registerValidateInfos.phone">
               <Input
-                  v-model:value="registerForm.phone"
-                  placeholder="请输入手机号码"
-              >
-              </Input>
-            </FormItem>
-            <FormItem label="邮件" v-bind="registerValidateInfos.mail">
-              <Input
-                  v-model:value="registerForm.mail"
-                  placeholder="请输入邮箱账号"
+                v-model:value="registerForm.phone"
+                placeholder="请输入手机号码"
               >
               </Input>
             </FormItem>
@@ -289,10 +275,10 @@ const registerSubmit = () => {
               <div class="action-btn">
                 <a></a>
                 <Button
-                    type="primary"
-                    @click="registerSubmit"
-                    :style="{ backgroundColor: '#202020', border: 'none' }"
-                >注册</Button
+                  type="primary"
+                  @click="registerSubmit"
+                  :style="{ backgroundColor: '#202020', border: 'none' }"
+                  >注册</Button
                 >
               </div>
             </FormItem>
@@ -302,13 +288,13 @@ const registerSubmit = () => {
     </div>
   </div>
   <Modal
-      :visible="state.open"
-      title="人机认证"
-      wrapClassName="code-modal"
-      width="450px"
-      @cancel="state.open = false"
-      @ok="handleLogin"
-      centered
+    :visible="state.open"
+    title="人机认证"
+    wrapClassName="code-modal"
+    width="450px"
+    @cancel="state.open = false"
+    @ok="handleLogin"
+    centered
   >
     <div class="wrapper">
       <h1 class="tip-text">
@@ -317,14 +303,14 @@ const registerSubmit = () => {
         }}
       </h1>
       <img
-          src="https://images-machen.oss-cn-beijing.aliyuncs.com/1_990064918_171_86_3_722467528_78457b21279219802d38525d32a77f39.png"
-          alt="微信公众号"
+        src="https://images-machen.oss-cn-beijing.aliyuncs.com/1_990064918_171_86_3_722467528_78457b21279219802d38525d32a77f39.png"
+        alt="微信公众号"
       />
       <div class="code-input">
         <label class="code-label">验证码</label>
         <Input
-            v-model:value="formState.code"
-            :style="{ width: '300px' }"
+          v-model:value="formState.code"
+          :style="{ width: '300px' }"
         ></Input>
       </div>
     </div>
