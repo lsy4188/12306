@@ -1,6 +1,7 @@
 package itlsy.Controller;
 
 
+import itlsy.UserContext;
 import itlsy.req.PassengersRemoveReq;
 import itlsy.req.PassengersSaveReq;
 import itlsy.resp.CommonResp;
@@ -26,14 +27,14 @@ public class PassengerController {
 
 
     @PostMapping("/SaveAndUpdate")
-    public CommonResp<Object> save(@Valid @RequestBody PassengersSaveReq req){
+    public Result<Void> save(@Valid @RequestBody PassengersSaveReq req){
          passengerService.SaveAndUpdate(req);
-        return new CommonResp<>();
+        return Results.success();
     }
 
     @GetMapping("/query")
     public Result<List<PassengersQueryResp>> queryPassengersList() {
-        List<PassengersQueryResp> passengersList = passengerService.listPassengerQueryByUsername();
+        List<PassengersQueryResp> passengersList = passengerService.listPassengerQueryByUsername(UserContext.getUserName());
         return Results.success(passengersList);
     }
 
@@ -50,8 +51,8 @@ public class PassengerController {
 //    }
 
     @PostMapping("/remove")
-    public CommonResp<Object> delete(@RequestBody PassengersRemoveReq req){
+    public Result<Void> delete(@RequestBody PassengersRemoveReq req){
         passengerService.removePassenger(req);
-        return new CommonResp<>();
+        return Results.success();
     }
 }

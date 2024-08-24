@@ -28,7 +28,7 @@ public interface PassengerService {
      *
      * @return 乘车人返回列表
      */
-    public List<PassengersQueryResp> listPassengerQueryByUsername();
+    public List<PassengersQueryResp> listPassengerQueryByUsername(String username);
 
     /**
      * 根据乘车人 ID 集合查询乘车人列表
