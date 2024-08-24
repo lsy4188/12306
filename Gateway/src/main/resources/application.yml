@@ -1,0 +1,83 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: gateway-service
+  profiles:
+    active: dev
+  cloud:
+    gateway:
+      routes: #路由转发，将/number/**转发到http://127.0.0.1:8082/
+        - id: Number
+#          uri:  http://127.0.0.1:8082/
+          uri: lb://Number
+          predicates:
+            - Path=/api/number/**
+          filters:
+            - name: TokenValidate
+              args:
+                blackPathPre:
+                  - /api/number/passenger
+                  - /api/number/query
+                  - /api/number/logout
+                  - /api/number/deletion
+
+
+        - id: order-service
+          uri:  lb://order-service
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - name: TokenValidate
+              args:
+                blackPathPre:
+                  - /api/order/self/page
+
+
+        - id: pay-service
+          uri: lb://pay-service
+          predicates:
+            - Path=/api/pay-service/**
+          filters:
+            - name: TokenValidate
+              args:
+                blackPathPre:
+                  - /api/pay-service/pay/create
+
+
+        - id: Business
+#          uri:  http://127.0.0.1:8084/
+          uri: lb://Business
+          predicates:
+            - Path=/api/business/**
+          filters:
+            - name: TokenValidate
+              args:
+                blackPathPre:
+                  - /api/business/ticket/purchase
+
+        - id: Batch
+#          uri:  http://127.0.0.1:8083/
+          uri: lb://Batch
+          predicates:
+            - Path=/batch/**
+        - id: xxl-job
+           # uri:  http://127.0.0.1:8084/
+          uri: lb://xxl-job
+          predicates:
+            - Path=/xxl-job/**
+      globalcors: #解决跨域问题关键(或者写一个配置文件)
+        cors-configurations:
+          '[/**]':
+            # 允许任何来源
+            allowedOrigins: "*"
+            # 允许任何头
+            allowedHeaders: "*"
+            # 允许任何方法
+            allowedMethods: "*"
+            # 预检请求的有效期
+            maxAge: 3600
+    nacos:
+      discovery:
+        namespace: 4327e1ac-cbaa-4600-9690-620da130e4b2
+        server-addr: localhost:8848
