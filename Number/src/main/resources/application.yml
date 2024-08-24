@@ -1,0 +1,33 @@
+server:
+  port: 8083
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: lsy
+    password: lsy200111
+    url: jdbc:mysql://localhost:3306/train?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启mybatis日志
+
+#测试结果
+test:
+  name: Nacos
+
+
+#配置seata(要与上面的看成两个项目)
+#seata:
+  # 事务组名称(
+  #由于将下面信息加载到了nacos配置中心
+  #又由于bootstrap.yml文件的加载顺序优先于application.yml，所以要将事务组名称放到bootstrap.yml中优先加载
+  #)
+  #tx-service-group: 12306-group
+#  service: 放到配置中心
+#    # 事务组与seata集群做关联
+#    vgroup-mapping:
+#      12306-group: default
+#    # seata集群对应的机器
+#    grouplist:
+#      default: localhost:8091
