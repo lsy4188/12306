@@ -80,8 +80,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, order_sn, user_id, username, train_id, carriage_number, seat_type, seat_number, 
-    real_name, id_type, id_card, ticket_type, phone, `status`, amount, create_time, update_time, 
+    id, order_sn, user_id, username, train_id, carriage_number, seat_type, seat_number,
+    real_name, id_type, id_card, ticket_type, phone, `status`, amount, create_time, update_time,
     del_flag
   </sql>
   <select id="selectByExample" parameterType="itlsy.entry.OrderItemExample" resultMap="BaseResultMap">

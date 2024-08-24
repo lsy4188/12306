@@ -64,4 +64,11 @@ public interface OrderService {
      * @return 本人车票订单集合
      */
     PageResponse<TicketOrderDetailSelfRespDTO> pageSelfTicketOrder(TicketOrderSelfPageQueryReqDTO requestParam);
+    /**
+     * 关闭火车票订单
+     *
+     * @param requestParam 关闭火车票订单入参
+     */
+    boolean closeTickOrder(CancelTicketOrderReqDTO requestParam);
+
 }

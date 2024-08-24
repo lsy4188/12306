@@ -1,6 +1,6 @@
 #限流和分布式事务还没有完成
 server:
-  port: 8082
+  port: 8086
 spring:
   application:
     name: order-service
@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: lsy
     password: lsy200111
-    url: jdbc:mysql://localhost:3306/train?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/order_service?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
     hikari:
       connection-timeout: 30000
   cloud:
@@ -30,18 +30,35 @@ spring:
     username: guest
     password: guest
     virtual-host: /
+    #这个配置是保证生产者确保消息推送到交换机中，不管成不成功，都会回调
+    publisher-confirm-type: correlated
+    #保证交换机能把消息推送到队列中
+    publisher-returns: true
+    #MQ的连接时间
+    connection-timeout: 10000
     #这个配置是保证消费者会消费消息，自动确认
     listener:
       simple:
         acknowledge-mode: auto
+    template:
+      retry:
+        enabled: true #开启消息重试机制
+        initial-interval: 1000 #重试间隔时间
+        max-attempts: 3 #最大重试次数
+        multiplier: 1.0 #重试间隔时间的倍数,下次等待时长=initial-interval*multiplier
+      mandatory: true #设置消息的强制性，确保消息不会被丢失,即当消息无法路由到任何队列时，RabbitMQ会返回一个错误给生产者
 
 mq:
   pay-result-callback-order-queue: delay_queue
   pay-result-callback-order-exchange: delay
   pay-result-callback-order-routing-key: key_delay
+
   refund-result-callback-order-queue: refund_queue
   refund-result-callback-order-exchange: refund_delay
   refund-result-callback-order-routing-key: key_refund_delay
+
+  order-delay-exchange: order_delay
+  order-delay-routing-key: key_order_delay
 
 mybatis:
   mapper-locations: classpath:/mapper/**/*.xml

@@ -1,13 +1,19 @@
 package itlsy.mq.produce;
 
+import cn.hutool.core.util.SerializeUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import itlsy.mq.event.DelayCloseOrderEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 /**
  * 延迟关闭订单生产者
@@ -29,15 +35,22 @@ public class DelayCloseOrderSendProduce extends AbstractCommonSendProduceTemplat
         return BaseSendExtendDTO.builder()
                 .eventName("延迟关闭订单")
                 .keys(messageSendEvent.getOrderSn())
-                .exchange()
-                .routingKey()
-                .sentTimeout()
-                .delayLevel()
+                .exchange(environment.getProperty("mq.order-delay-exchange"))
+                .routingKey(environment.getProperty("mq.order-delay-routing-key"))
+                .sentTimeout(10000L)
+                .delayLevel(1)
                 .build();
     }
 
     @Override
     protected Message buildMessage(DelayCloseOrderEvent messageSendEvent, BaseSendExtendDTO requestParam) {
-        return null;
+        String keys = StrUtil.isEmpty(requestParam.getKeys()) ? UUID.randomUUID().toString() : requestParam.getKeys();
+        Message message = MessageBuilder
+                .withBody(SerializeUtil.serialize(JSONUtil.toJsonStr(messageSendEvent)))
+                .setHeader("keys", keys)
+                .build();
+        //添加延迟消息属性
+        message.getMessageProperties().setDelay(10000);
+        return message;
     }
 }
