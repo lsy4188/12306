@@ -25,6 +25,24 @@
 
         <dependency>
             <groupId>itlsy</groupId>
+            <artifactId>cachesystem</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>itlsy</groupId>
+            <artifactId>convention</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>itlsy</groupId>
+            <artifactId>usertool</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>itlsy</groupId>
             <artifactId>designpattern</artifactId>
             <version>${project.version}</version>
         </dependency>

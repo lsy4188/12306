@@ -2,7 +2,6 @@ package itlsy.service.Impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.google.protobuf.ServiceException;
 import itlsy.convert.RefundRequestConvert;
 import itlsy.dto.RefundCreateDTO;
 import itlsy.entry.PayDO;
@@ -11,6 +10,7 @@ import itlsy.entry.RefundDO;
 import itlsy.entry.RefundDOExample;
 import itlsy.enums.RefundTypeEnum;
 import itlsy.enums.TradeStatusEnum;
+import itlsy.exception.ServiceException;
 import itlsy.feign.TicketOrderRemoteService;
 import itlsy.feign.dto.TicketOrderDetailRespDTO;
 import itlsy.mapper.PayMapper;
@@ -59,7 +59,7 @@ public class RefundServiceImpl implements RefundService {
         PayDO payDO = payMapper.selectByExample(payDOExample).get(0);
         if (ObjectUtil.isNull(payDO)) {
             log.error("支付单不存在，orderSn：{}", requestParam.getOrderSn());
-            throw new RuntimeException("支付单不存在");
+            throw new ServiceException("支付单不存在");
         }
         payDO.setPayAmount(payDO.getTotalAmount() - requestParam.getRefundAmount());
         //创建退款单
@@ -80,7 +80,7 @@ public class RefundServiceImpl implements RefundService {
         int updateResult = payMapper.updateByExampleSelective(payDO, example);
         if (updateResult <= 0) {
             log.error("更新支付单状态失败，orderSn：{}", refundRequest.getOrderSn());
-            throw new RuntimeException("更新支付单状态失败");
+            throw new ServiceException("更新支付单状态失败");
         }
         RefundDOExample refundDOExample = new RefundDOExample();
         refundDOExample.createCriteria().andOrderSnEqualTo(requestParam.getOrderSn());
@@ -90,7 +90,7 @@ public class RefundServiceImpl implements RefundService {
         int refundUpdateResult = refundDOMapper.updateByExampleSelective(refundDO, refundDOExample);
         if (refundUpdateResult <= 0) {
             log.error("更新退款单状态失败，orderSn：{}", requestParam.getOrderSn());
-            throw new RuntimeException("更新退款单状态失败");
+            throw new ServiceException("更新退款单状态失败");
         }
 
         // 退款成功，回调订单服务告知退款结果，修改订单流转状态
@@ -114,7 +114,7 @@ public class RefundServiceImpl implements RefundService {
         PayDO payDO = payMapper.selectByExample(payDOExample).get(0);
         if (ObjectUtil.isNull(payDO)) {
             log.error("支付单不存在，orderSn：{}", requestParam.getOrderSn());
-            throw new RuntimeException("支付单不存在");
+            throw new ServiceException("支付单不存在");
         }
         payDO.setPayAmount(payDO.getTotalAmount() - requestParam.getRefundAmount());
 
@@ -135,7 +135,7 @@ public class RefundServiceImpl implements RefundService {
         int updateResult = payMapper.updateByExampleSelective(payDO, example);
         if (updateResult <= 0) {
             log.error("更新支付单状态失败，orderSn：{}", refundRequest.getOrderSn());
-            throw new RuntimeException("更新支付单状态失败");
+            throw new ServiceException("更新支付单状态失败");
         }
 
         //更新退款记录表状态
@@ -147,7 +147,7 @@ public class RefundServiceImpl implements RefundService {
         int refundUpdateResult = refundDOMapper.updateByExampleSelective(refundDO, refundDOExample);
         if (refundUpdateResult <= 0) {
             log.error("更新退款单状态失败，orderSn：{}", requestParam.getOrderSn());
-            throw new RuntimeException("更新退款单状态失败");
+            throw new ServiceException("更新退款单状态失败");
         }
 
         // 退款成功，回调订单服务告知退款结果，修改订单流转状态

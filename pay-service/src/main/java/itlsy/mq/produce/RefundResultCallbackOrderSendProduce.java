@@ -38,7 +38,7 @@ public class RefundResultCallbackOrderSendProduce extends AbstractCommonSendProd
                 .exchange(environment.getProperty("mq.refund.exchange.delay.close.order"))
                 .keys(messageSendEvent.getOrderSn())
                 .routingKey(environment.getProperty("mq.refund.routing.key.delay.close.order"))
-                .sentTimeout(2000L)
+                .sentTimeout(10000L)
                 .delayLevel(1)
                 .build();
     }

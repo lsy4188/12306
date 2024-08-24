@@ -39,7 +39,7 @@ public class PayResultCallbackOrderSendProduce extends AbstractCommonSendProduce
                 .exchange(environment.getProperty("mq.pay.exchange.delay.close.order"))
                 .keys(messageSendEvent.getOrderSn())
                 .routingKey(environment.getProperty("mq.pay.routing.key.delay.close.order"))
-                .sentTimeout(20000L)
+                .sentTimeout(10000L)
                 .delayLevel(1)
                 .build();
     }
