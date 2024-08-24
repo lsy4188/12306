@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itlsy.mapper.TrainMapper">
+  <resultMap id="BaseResultMap" type="itlsy.entry.Train">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="train_number" jdbcType="VARCHAR" property="trainNumber" />
+    <result column="train_type" jdbcType="INTEGER" property="trainType" />
+    <result column="train_tag" jdbcType="VARCHAR" property="trainTag" />
+    <result column="train_brand" jdbcType="VARCHAR" property="trainBrand" />
+    <result column="start_station" jdbcType="VARCHAR" property="startStation" />
+    <result column="end_station" jdbcType="VARCHAR" property="endStation" />
+    <result column="start_region" jdbcType="VARCHAR" property="startRegion" />
+    <result column="end_region" jdbcType="VARCHAR" property="endRegion" />
+    <result column="sale_time" jdbcType="TIMESTAMP" property="saleTime" />
+    <result column="sale_status" jdbcType="INTEGER" property="saleStatus" />
+    <result column="departure_time" jdbcType="TIMESTAMP" property="departureTime" />
+    <result column="arrival_time" jdbcType="TIMESTAMP" property="arrivalTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="del_flag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, train_number, train_type, train_tag, train_brand, start_station, end_station, 
+    start_region, end_region, sale_time, sale_status, departure_time, arrival_time, create_time, 
+    update_time, del_flag
+  </sql>
+  <select id="selectByExample" parameterType="itlsy.entry.TrainExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from train
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from train
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from train
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="itlsy.entry.TrainExample">
+    delete from train
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="itlsy.entry.Train">
+    insert into train (id, train_number, train_type, 
+      train_tag, train_brand, start_station, 
+      end_station, start_region, end_region, 
+      sale_time, sale_status, departure_time, 
+      arrival_time, create_time, update_time, 
+      del_flag)
+    values (#{id,jdbcType=BIGINT}, #{trainNumber,jdbcType=VARCHAR}, #{trainType,jdbcType=INTEGER}, 
+      #{trainTag,jdbcType=VARCHAR}, #{trainBrand,jdbcType=VARCHAR}, #{startStation,jdbcType=VARCHAR}, 
+      #{endStation,jdbcType=VARCHAR}, #{startRegion,jdbcType=VARCHAR}, #{endRegion,jdbcType=VARCHAR}, 
+      #{saleTime,jdbcType=TIMESTAMP}, #{saleStatus,jdbcType=INTEGER}, #{departureTime,jdbcType=TIMESTAMP}, 
+      #{arrivalTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{delFlag,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="itlsy.entry.Train">
+    insert into train
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="trainNumber != null">
+        train_number,
+      </if>
+      <if test="trainType != null">
+        train_type,
+      </if>
+      <if test="trainTag != null">
+        train_tag,
+      </if>
+      <if test="trainBrand != null">
+        train_brand,
+      </if>
+      <if test="startStation != null">
+        start_station,
+      </if>
+      <if test="endStation != null">
+        end_station,
+      </if>
+      <if test="startRegion != null">
+        start_region,
+      </if>
+      <if test="endRegion != null">
+        end_region,
+      </if>
+      <if test="saleTime != null">
+        sale_time,
+      </if>
+      <if test="saleStatus != null">
+        sale_status,
+      </if>
+      <if test="departureTime != null">
+        departure_time,
+      </if>
+      <if test="arrivalTime != null">
+        arrival_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="trainNumber != null">
+        #{trainNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="trainType != null">
+        #{trainType,jdbcType=INTEGER},
+      </if>
+      <if test="trainTag != null">
+        #{trainTag,jdbcType=VARCHAR},
+      </if>
+      <if test="trainBrand != null">
+        #{trainBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="startStation != null">
+        #{startStation,jdbcType=VARCHAR},
+      </if>
+      <if test="endStation != null">
+        #{endStation,jdbcType=VARCHAR},
+      </if>
+      <if test="startRegion != null">
+        #{startRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="endRegion != null">
+        #{endRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="saleTime != null">
+        #{saleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saleStatus != null">
+        #{saleStatus,jdbcType=INTEGER},
+      </if>
+      <if test="departureTime != null">
+        #{departureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arrivalTime != null">
+        #{arrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="itlsy.entry.TrainExample" resultType="java.lang.Long">
+    select count(*) from train
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update train
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.trainNumber != null">
+        train_number = #{record.trainNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainType != null">
+        train_type = #{record.trainType,jdbcType=INTEGER},
+      </if>
+      <if test="record.trainTag != null">
+        train_tag = #{record.trainTag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.trainBrand != null">
+        train_brand = #{record.trainBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startStation != null">
+        start_station = #{record.startStation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endStation != null">
+        end_station = #{record.endStation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startRegion != null">
+        start_region = #{record.startRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endRegion != null">
+        end_region = #{record.endRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.saleTime != null">
+        sale_time = #{record.saleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.saleStatus != null">
+        sale_status = #{record.saleStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.departureTime != null">
+        departure_time = #{record.departureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.arrivalTime != null">
+        arrival_time = #{record.arrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delFlag != null">
+        del_flag = #{record.delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update train
+    set id = #{record.id,jdbcType=BIGINT},
+      train_number = #{record.trainNumber,jdbcType=VARCHAR},
+      train_type = #{record.trainType,jdbcType=INTEGER},
+      train_tag = #{record.trainTag,jdbcType=VARCHAR},
+      train_brand = #{record.trainBrand,jdbcType=VARCHAR},
+      start_station = #{record.startStation,jdbcType=VARCHAR},
+      end_station = #{record.endStation,jdbcType=VARCHAR},
+      start_region = #{record.startRegion,jdbcType=VARCHAR},
+      end_region = #{record.endRegion,jdbcType=VARCHAR},
+      sale_time = #{record.saleTime,jdbcType=TIMESTAMP},
+      sale_status = #{record.saleStatus,jdbcType=INTEGER},
+      departure_time = #{record.departureTime,jdbcType=TIMESTAMP},
+      arrival_time = #{record.arrivalTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      del_flag = #{record.delFlag,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="itlsy.entry.Train">
+    update train
+    <set>
+      <if test="trainNumber != null">
+        train_number = #{trainNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="trainType != null">
+        train_type = #{trainType,jdbcType=INTEGER},
+      </if>
+      <if test="trainTag != null">
+        train_tag = #{trainTag,jdbcType=VARCHAR},
+      </if>
+      <if test="trainBrand != null">
+        train_brand = #{trainBrand,jdbcType=VARCHAR},
+      </if>
+      <if test="startStation != null">
+        start_station = #{startStation,jdbcType=VARCHAR},
+      </if>
+      <if test="endStation != null">
+        end_station = #{endStation,jdbcType=VARCHAR},
+      </if>
+      <if test="startRegion != null">
+        start_region = #{startRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="endRegion != null">
+        end_region = #{endRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="saleTime != null">
+        sale_time = #{saleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="saleStatus != null">
+        sale_status = #{saleStatus,jdbcType=INTEGER},
+      </if>
+      <if test="departureTime != null">
+        departure_time = #{departureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arrivalTime != null">
+        arrival_time = #{arrivalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="itlsy.entry.Train">
+    update train
+    set train_number = #{trainNumber,jdbcType=VARCHAR},
+      train_type = #{trainType,jdbcType=INTEGER},
+      train_tag = #{trainTag,jdbcType=VARCHAR},
+      train_brand = #{trainBrand,jdbcType=VARCHAR},
+      start_station = #{startStation,jdbcType=VARCHAR},
+      end_station = #{endStation,jdbcType=VARCHAR},
+      start_region = #{startRegion,jdbcType=VARCHAR},
+      end_region = #{endRegion,jdbcType=VARCHAR},
+      sale_time = #{saleTime,jdbcType=TIMESTAMP},
+      sale_status = #{saleStatus,jdbcType=INTEGER},
+      departure_time = #{departureTime,jdbcType=TIMESTAMP},
+      arrival_time = #{arrivalTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      del_flag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

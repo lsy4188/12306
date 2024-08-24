@@ -1,0 +1,116 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: Business
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: lsy
+    password: lsy200111
+    url: jdbc:mysql://localhost:3306/train?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    hikari:
+      connection-timeout: 30000
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        namespace: 4327e1ac-cbaa-4600-9690-620da130e4b2
+
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:18080
+      web-context-unify: false #当流控模式为链路时必须关闭,即每个接口都是分开的
+      datasource:
+        flow:
+          nacos:
+            server-addr: localhost:8848
+            namespace: 4327e1ac-cbaa-4600-9690-620da130e4b2
+            group-id: SENTINEL_GROUP
+            data-id: sentinel
+            rule-type: flow
+  rabbitmq:
+    host: 192.168.170.130 #运行RabbitMQ的主机IP
+    port: 5672 #端口
+    virtual-host: / #虚拟主机
+    username: guest #用户名
+    password: guest #密码
+    #MQ的连接时间
+    connection-timeout: 10000
+    #这个配置是保证消费者会消费消息，自动确认
+    listener:
+      simple:
+        concurrency: 1
+        max-concurrency: 1
+        prefetch: 1
+        acknowledge-mode: auto
+    template:
+      mandatory: true #设置消息的强制性，确保消息不会被丢失,即当消息无法路由到任何队列时，RabbitMQ会返回一个错误给生产者
+
+
+
+  data:
+    redis: #非主机redis
+      host: r-uf6ljbcdaxobsifyctpd.redis.rds.aliyuncs.com
+      port: 6379
+      password: Redis000
+
+  cache:
+    type: redis
+    redis:
+      use-key-prefix: true
+      # 使用key前缀
+      key-prefix: 12306_cache_
+      # 允许出现缓存空值
+      cache-null-values: true
+      # 过期时间
+      time-to-live: 60000
+mq:
+  order-delay:
+    exchange: order-delay-exchange
+    queue: order-delay-queue
+    routing-key: order-delay-key
+
+mybatis:
+  #  classpath:/mapper/*.xml会匹配到所有在类路径下的XML文件
+  #  classpath:/mapper/**/*xml会匹配到所有在类路径下的XML文件，包括子目录中的XML文件。
+  mapper-locations: classpath:/mapper/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启mybatis日志
+    #配置为statement，即关闭一级缓存
+    local-cache-scope: statement
+
+#配置seata
+seata:
+  config: #配置中心
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      namespace: 4327e1ac-cbaa-4600-9690-620da130e4b2
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+      data-id: seataServer.properties
+
+  registry: #注册中心
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 127.0.0.1:8848
+      namespace: 4327e1ac-cbaa-4600-9690-620da130e4b2
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+
+  tx-service-group: 12306-group
+
+  #  service: 放到配置中心
+  #    # 事务组与seata集群做关联
+  #    vgroup-mapping:
+  #      12306-group: default
+  #    # seata集群对应的机器
+  #    grouplist:
+  #      default: localhost:8091

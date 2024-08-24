@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itlsy.mapper.TrainSeatMapper">
+  <resultMap id="BaseResultMap" type="itlsy.entry.TrainSeat">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="train_id" jdbcType="BIGINT" property="trainId" />
+    <result column="carriage_number" jdbcType="VARCHAR" property="carriageNumber" />
+    <result column="seat_number" jdbcType="VARCHAR" property="seatNumber" />
+    <result column="seat_type" jdbcType="INTEGER" property="seatType" />
+    <result column="start_station" jdbcType="VARCHAR" property="startStation" />
+    <result column="end_station" jdbcType="VARCHAR" property="endStation" />
+    <result column="price" jdbcType="INTEGER" property="price" />
+    <result column="seat_status" jdbcType="INTEGER" property="seatStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="del_flag" jdbcType="BIT" property="delFlag" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, train_id, carriage_number, seat_number, seat_type, start_station, end_station, 
+    price, seat_status, create_time, update_time, del_flag
+  </sql>
+  <select id="selectByExample" parameterType="itlsy.entry.TrainSeatExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from train_seat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from train_seat
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from train_seat
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="itlsy.entry.TrainSeatExample">
+    delete from train_seat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="itlsy.entry.TrainSeat">
+    insert into train_seat (id, train_id, carriage_number, 
+      seat_number, seat_type, start_station, 
+      end_station, price, seat_status, 
+      create_time, update_time, del_flag
+      )
+    values (#{id,jdbcType=BIGINT}, #{trainId,jdbcType=BIGINT}, #{carriageNumber,jdbcType=VARCHAR}, 
+      #{seatNumber,jdbcType=VARCHAR}, #{seatType,jdbcType=INTEGER}, #{startStation,jdbcType=VARCHAR}, 
+      #{endStation,jdbcType=VARCHAR}, #{price,jdbcType=INTEGER}, #{seatStatus,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="itlsy.entry.TrainSeat">
+    insert into train_seat
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="trainId != null">
+        train_id,
+      </if>
+      <if test="carriageNumber != null">
+        carriage_number,
+      </if>
+      <if test="seatNumber != null">
+        seat_number,
+      </if>
+      <if test="seatType != null">
+        seat_type,
+      </if>
+      <if test="startStation != null">
+        start_station,
+      </if>
+      <if test="endStation != null">
+        end_station,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="seatStatus != null">
+        seat_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="trainId != null">
+        #{trainId,jdbcType=BIGINT},
+      </if>
+      <if test="carriageNumber != null">
+        #{carriageNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="seatNumber != null">
+        #{seatNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="seatType != null">
+        #{seatType,jdbcType=INTEGER},
+      </if>
+      <if test="startStation != null">
+        #{startStation,jdbcType=VARCHAR},
+      </if>
+      <if test="endStation != null">
+        #{endStation,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=INTEGER},
+      </if>
+      <if test="seatStatus != null">
+        #{seatStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="itlsy.entry.TrainSeatExample" resultType="java.lang.Long">
+    select count(*) from train_seat
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+<!--  获取列车车厢的余票集合-->
+  <select id="listSeatRemainingTicket" parameterType="itlsy.entry.TrainSeat" resultType="java.lang.Integer">
+    select count(*)as count
+    from train_seat
+    where train_id=#{trainSeat.trainId}
+    and start_station=#{trainSeat.startStation}
+    and end_station=#{trainSeat.endStation}
+    and seat_status='0'
+    and carriage_number in
+    <foreach collection="trainCarriageList" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    group by carriage_number
+  </select>
+    <select id="listSeatTypeCount" resultType="itlsy.dto.SeatTypeCountDTO">
+      select seat_type as seatType,count(*) as seatCount
+      from train_seat
+      where train_id=#{trainId}
+      and start_station=#{startStation}
+      and end_station=#{endStation}
+      and seat_status='0'
+      and seat_type in
+      <foreach collection="seatTypes" item="seatType" open="(" separator="," close=")">
+        #{seatTypes}
+      </foreach>
+      group by seat_type
+      having seatCount > 0
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map">
+    update train_seat
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.trainId != null">
+        train_id = #{record.trainId,jdbcType=BIGINT},
+      </if>
+      <if test="record.carriageNumber != null">
+        carriage_number = #{record.carriageNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.seatNumber != null">
+        seat_number = #{record.seatNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.seatType != null">
+        seat_type = #{record.seatType,jdbcType=INTEGER},
+      </if>
+      <if test="record.startStation != null">
+        start_station = #{record.startStation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endStation != null">
+        end_station = #{record.endStation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=INTEGER},
+      </if>
+      <if test="record.seatStatus != null">
+        seat_status = #{record.seatStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delFlag != null">
+        del_flag = #{record.delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update train_seat
+    set id = #{record.id,jdbcType=BIGINT},
+      train_id = #{record.trainId,jdbcType=BIGINT},
+      carriage_number = #{record.carriageNumber,jdbcType=VARCHAR},
+      seat_number = #{record.seatNumber,jdbcType=VARCHAR},
+      seat_type = #{record.seatType,jdbcType=INTEGER},
+      start_station = #{record.startStation,jdbcType=VARCHAR},
+      end_station = #{record.endStation,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=INTEGER},
+      seat_status = #{record.seatStatus,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      del_flag = #{record.delFlag,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="itlsy.entry.TrainSeat">
+    update train_seat
+    <set>
+      <if test="trainId != null">
+        train_id = #{trainId,jdbcType=BIGINT},
+      </if>
+      <if test="carriageNumber != null">
+        carriage_number = #{carriageNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="seatNumber != null">
+        seat_number = #{seatNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="seatType != null">
+        seat_type = #{seatType,jdbcType=INTEGER},
+      </if>
+      <if test="startStation != null">
+        start_station = #{startStation,jdbcType=VARCHAR},
+      </if>
+      <if test="endStation != null">
+        end_station = #{endStation,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=INTEGER},
+      </if>
+      <if test="seatStatus != null">
+        seat_status = #{seatStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        del_flag = #{delFlag,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="itlsy.entry.TrainSeat">
+    update train_seat
+    set train_id = #{trainId,jdbcType=BIGINT},
+      carriage_number = #{carriageNumber,jdbcType=VARCHAR},
+      seat_number = #{seatNumber,jdbcType=VARCHAR},
+      seat_type = #{seatType,jdbcType=INTEGER},
+      start_station = #{startStation,jdbcType=VARCHAR},
+      end_station = #{endStation,jdbcType=VARCHAR},
+      price = #{price,jdbcType=INTEGER},
+      seat_status = #{seatStatus,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      del_flag = #{delFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
